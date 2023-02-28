@@ -21,19 +21,22 @@ public class QuadController : MonoBehaviour
         public Color color;
     }
 
-    private Color currentColor;
-    private QuadState currentQuadState;
+    private Color selectedColor;
+    private QuadState selectedQuadState;
 
     private const int quadStateMin = 0;
     private int quadStateMax = 3;
 
-    private const float changeStateWaitTimer = 1.0f;
+    private const float changeStateWaitTimer = 5.0f;
 
     [SerializeField] private MeshRenderer quadVisualRenderer;
     [SerializeField] private List<Struct_StateColor> stateMaterialsList;
 
     private void Start()
     {
+        GetNewState();
+        ChangeMaterialColor();
+
         StartCoroutine(GetNewQuadState());
 
         quadStateMax = stateMaterialsList.Count;
@@ -41,13 +44,12 @@ public class QuadController : MonoBehaviour
 
     private void OnMouseDown()
     {
-        Debug.Log("You Hit Me " + name);
-        if (currentQuadState != QuadState.Off)
+        if (selectedQuadState != QuadState.Off)
         {
-            currentQuadState = QuadState.Off;
-            ChangeMaterial();
-            
-            GameManager.Instance.OnAnyQuadClicked?.Invoke(currentColor);
+            GameManager.Instance.OnAnyQuadClicked?.Invoke(selectedColor);
+
+            selectedQuadState = QuadState.Off;
+            ChangeMaterialColor();
         }
     }
 
@@ -55,16 +57,21 @@ public class QuadController : MonoBehaviour
     {
         yield return new WaitForSeconds(changeStateWaitTimer);
 
-        int randomStateInt = Random.Range(quadStateMin, quadStateMax);
-        currentQuadState = (QuadState)randomStateInt;
-        ChangeMaterial();
+        GetNewState();
+        ChangeMaterialColor();
 
         StartCoroutine(GetNewQuadState());
     }
 
-    private void ChangeMaterial()
+    private void GetNewState()
     {
-        currentColor = stateMaterialsList.Find(stateMaterial => stateMaterial.state == currentQuadState).color;
-        quadVisualRenderer.material.color = currentColor;
+        int randomStateInt = Random.Range(quadStateMin, quadStateMax);
+        selectedQuadState = (QuadState)randomStateInt;
+    }
+
+    private void ChangeMaterialColor()
+    {
+        selectedColor = stateMaterialsList.Find(stateMaterial => stateMaterial.state == selectedQuadState).color;
+        quadVisualRenderer.material.color = selectedColor;
     }
 }

@@ -5,16 +5,20 @@ using UnityEngine.UI;
 
 public class ColorSelectionController : MonoBehaviour
 {
-    private const float changeStateWaitTimer = 1.0f;
+    private const float changeStateWaitTimer = 5.0f;
 
     private const int colorSelectionMin = 0;
     private int colorSelectionMax = 2;
+
+    private Color selectedColor;
 
     [SerializeField] private Image quadColorToHit;
     [SerializeField] private List<Color> colorsList;
 
     private void Start()
     {
+        ChangeSelectedColor();
+
         StartCoroutine(GetNewColor());
 
         colorSelectionMax = colorsList.Count;
@@ -24,9 +28,18 @@ public class ColorSelectionController : MonoBehaviour
     {
         yield return new WaitForSeconds(changeStateWaitTimer);
 
-        int randomColorInt = Random.Range(colorSelectionMin, colorSelectionMax);
-        quadColorToHit.color = colorsList[randomColorInt];
+        ChangeSelectedColor();
 
         StartCoroutine(GetNewColor());
+    }
+
+    private void ChangeSelectedColor()
+    {
+        int randomColorInt = Random.Range(colorSelectionMin, colorSelectionMax);
+
+        selectedColor = colorsList[randomColorInt];
+        quadColorToHit.color = selectedColor;
+
+        GameManager.Instance.OnSelectedColorChanged?.Invoke(selectedColor);
     }
 }

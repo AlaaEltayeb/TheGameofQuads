@@ -4,24 +4,30 @@ using UnityEngine;
 public class PointsController : MonoBehaviour
 {
     private int score = 0;
-    private Color currentColor;
+    private Color selectedColor;
 
     [SerializeField] private TextMeshProUGUI pointsText;
 
-    void Start()
+    private void OnEnable()
     {
-        GameManager.Instance.OnAnyQuadClicked += CalculateScore;
-        GameManager.Instance.OnSelectedColorChanged += ChangeSelectedColor;
+        QuadController.OnAnyQuadClicked += CalculatePoints;
+        ServiceLocator.Get<ColorSelectionController>().OnSelectedColorChanged += ChangeSelectedColor;
+    }
+
+    private void OnDisable()
+    {
+        QuadController.OnAnyQuadClicked -= CalculatePoints;
+        ServiceLocator.Get<ColorSelectionController>().OnSelectedColorChanged -= ChangeSelectedColor;
     }
 
     private void ChangeSelectedColor(Color color)
     {
-        currentColor = color;
+        selectedColor = color;
     }
 
-    private void CalculateScore(Color color)
+    private void CalculatePoints(Color color)
     {
-        if (currentColor == color)
+        if (selectedColor == color)
         {
             score++;
         }

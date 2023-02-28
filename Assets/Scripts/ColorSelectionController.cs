@@ -1,11 +1,16 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+using Random = UnityEngine.Random;
+
 public class ColorSelectionController : MonoBehaviour
 {
-    private const float changeStateWaitTimer = 5.0f;
+    public Action<Color> OnSelectedColorChanged;
+
+    private const float changeStateWaitTimer = 1.0f;
 
     private const int colorSelectionMin = 0;
     private int colorSelectionMax = 2;
@@ -15,6 +20,11 @@ public class ColorSelectionController : MonoBehaviour
     [SerializeField] private Image quadColorToHit;
     [SerializeField] private List<Color> colorsList;
 
+    private void Awake()
+    {
+        ServiceLocator.Add(this);
+    }
+
     private void Start()
     {
         ChangeSelectedColor();
@@ -22,6 +32,11 @@ public class ColorSelectionController : MonoBehaviour
         StartCoroutine(GetNewColor());
 
         colorSelectionMax = colorsList.Count;
+    }
+
+    private void OnDisable()
+    {
+        ServiceLocator.Remove(this);
     }
 
     private IEnumerator GetNewColor()
@@ -40,6 +55,6 @@ public class ColorSelectionController : MonoBehaviour
         selectedColor = colorsList[randomColorInt];
         quadColorToHit.color = selectedColor;
 
-        GameManager.Instance.OnSelectedColorChanged?.Invoke(selectedColor);
+        OnSelectedColorChanged?.Invoke(selectedColor);
     }
 }

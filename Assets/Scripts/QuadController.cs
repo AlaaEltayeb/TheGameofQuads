@@ -7,6 +7,8 @@ using Random = UnityEngine.Random;
 
 public class QuadController : MonoBehaviour
 {
+    public static Action<Color> OnAnyQuadClicked;
+
     enum QuadState
     {
         Off = 0,
@@ -27,7 +29,7 @@ public class QuadController : MonoBehaviour
     private const int quadStateMin = 0;
     private int quadStateMax = 3;
 
-    private const float changeStateWaitTimer = 5.0f;
+    private const float changeStateWaitTimer = 1.0f;
 
     [SerializeField] private MeshRenderer quadVisualRenderer;
     [SerializeField] private List<Struct_StateColor> stateMaterialsList;
@@ -46,7 +48,7 @@ public class QuadController : MonoBehaviour
     {
         if (selectedQuadState != QuadState.Off)
         {
-            GameManager.Instance.OnAnyQuadClicked?.Invoke(selectedColor);
+            OnAnyQuadClicked?.Invoke(selectedColor);
 
             selectedQuadState = QuadState.Off;
             ChangeMaterialColor();

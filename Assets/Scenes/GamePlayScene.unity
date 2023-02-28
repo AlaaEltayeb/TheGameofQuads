@@ -723,6 +723,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameOverScreen: {fileID: 118916793}
+  pointText: {fileID: 7483234}
 --- !u!1 &383920850
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,12 +1,20 @@
+using System;
 using TMPro;
 using UnityEngine;
 
 public class PointsController : MonoBehaviour
 {
-    private int score = 0;
+    public Action<int> OnPointsChanged;
+
+    private int points = 0;
     private Color selectedColor;
 
     [SerializeField] private TextMeshProUGUI pointsText;
+
+    private void Awake()
+    {
+        ServiceLocator.Add(this);
+    }
 
     private void OnEnable()
     {
@@ -18,6 +26,8 @@ public class PointsController : MonoBehaviour
     {
         QuadController.OnAnyQuadClicked -= CalculatePoints;
         ServiceLocator.Get<ColorSelectionController>().OnSelectedColorChanged -= ChangeSelectedColor;
+
+        ServiceLocator.Remove(this);
     }
 
     private void ChangeSelectedColor(Color color)
@@ -29,13 +39,15 @@ public class PointsController : MonoBehaviour
     {
         if (selectedColor == color)
         {
-            score++;
+            points++;
         }
         else
         {
-            score--;
+            points--;
         }
 
-        pointsText.text = $"Points:   {score}";
+        pointsText.text = $"Points:   {points}";
+
+        OnPointsChanged?.Invoke(points);
     }
 }

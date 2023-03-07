@@ -8,7 +8,7 @@ public class TimeController : MonoBehaviour
     public Action OnTimeOut;
 
     private float timer = 0;
-    private float gameTime = 5;
+    [SerializeField] private float gameTime = 30;
 
     [SerializeField] private TextMeshProUGUI timeText;
 

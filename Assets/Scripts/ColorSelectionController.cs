@@ -34,8 +34,9 @@ public class ColorSelectionController : MonoBehaviour
         colorSelectionMax = colorsList.Count;
     }
 
-    private void OnDisable()
+    private void OnDestroy()
     {
+        OnSelectedColorChanged = null;
         ServiceLocator.Remove(this);
     }
 

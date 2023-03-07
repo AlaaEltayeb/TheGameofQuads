@@ -18,12 +18,6 @@ public class GameOverController : MonoBehaviour
         SetPointsText();
     }
 
-    private void OnDisable()
-    {
-        ServiceLocator.Get<TimeController>().OnTimeOut -= ShowGameOver;
-        ServiceLocator.Get<PointsController>().OnPointsChanged -= SetPoints;
-    }
-
     private void ShowGameOver()
     {
         SetPointsText();

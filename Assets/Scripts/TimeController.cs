@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Threading;
 using TMPro;
 using UnityEngine;
 
@@ -24,8 +25,9 @@ public class TimeController : MonoBehaviour
         StartCoroutine(RunGameTimer());
     }
 
-    private void OnDisable()
+    private void OnDestroy()
     {
+        OnTimeOut = null;
         ServiceLocator.Remove(this);
     }
 

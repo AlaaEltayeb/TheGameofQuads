@@ -44,6 +44,11 @@ public class QuadController : MonoBehaviour
         quadStateMax = stateMaterialsList.Count;
     }
 
+    private void OnDestroy()
+    {
+        OnAnyQuadClicked = null;
+    }
+
     private void OnMouseDown()
     {
         if (selectedQuadState != QuadState.Off)

@@ -22,11 +22,9 @@ public class PointsController : MonoBehaviour
         ServiceLocator.Get<ColorSelectionController>().OnSelectedColorChanged += ChangeSelectedColor;
     }
 
-    private void OnDisable()
+    private void OnDestroy()
     {
-        QuadController.OnAnyQuadClicked -= CalculatePoints;
-        ServiceLocator.Get<ColorSelectionController>().OnSelectedColorChanged -= ChangeSelectedColor;
-
+        OnPointsChanged = null;
         ServiceLocator.Remove(this);
     }
 
